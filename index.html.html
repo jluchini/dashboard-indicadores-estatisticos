@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+ <head>
+  <meta charset="utf-8"/>
+  <title>
+   Dashboard – Indicadores Estatísticos
+  </title>
+  <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
+  <style>
+   :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f4f5f7;--card:#fff;--tx:#172b4d;--mut:#6b778c;--bl:#3b73b9;--bd:#dfe1e6;--ok:#2e8b3d;--wa:#e08a00;--er:#d04437}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#161a20;--card:#212730;--tx:#e6e9ee;--mut:#9aa5b5;--bl:#2f5f9e;--bd:#38404c}}
+:root[data-theme="dark"]{--bg:#161a20;--card:#212730;--tx:#e6e9ee;--mut:#9aa5b5;--bl:#2f5f9e;--bd:#38404c}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:14px/1.4 -apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+.nav{background:var(--bl);color:#fff;padding:10px 20px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.nav b{font-size:16px}.nav .sp{flex:1}
+.btn{background:rgba(255,255,255,.18);color:#fff;border:0;border-radius:3px;padding:6px 12px;cursor:pointer;font-size:13px}
+.wrap{max-width:1300px;margin:0 auto;padding:18px 20px}
+h1{font-size:24px;font-weight:400;margin:0 0 4px}.sub{color:var(--mut);margin-bottom:14px}
+.grid{display:grid;grid-template-columns:1fr 1.5fr 1fr;gap:16px;align-items:start}
+.col{display:flex;flex-direction:column;gap:16px;min-width:0}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.g{background:var(--card);border:1px solid var(--bd);border-radius:3px}
+.g>h3{margin:0;background:var(--bl);color:#fff;font-size:13px;font-weight:600;padding:7px 12px;border-radius:2px 2px 0 0}
+.b{padding:12px}
+.ctl{display:flex;gap:8px;flex-wrap:wrap}
+select{background:var(--card);color:var(--tx);border:1px solid var(--bd);border-radius:3px;padding:5px 8px;font-size:13px;max-width:100%}
+.kp{display:grid;grid-template-columns:1fr 1fr;gap:14px 8px;text-align:center}
+.kp .n{font-size:26px;font-weight:600;line-height:1.1}
+.kp .l{display:inline-block;font-size:10px;border:1px solid;border-radius:3px;padding:1px 8px;margin-top:4px;background:var(--card)}
+.gs{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:8px;
+  width:100%;
+}
+.gs > div{
+  min-width:0;
+  width:100%;
+}
+.gw{
+  position:relative;
+  height:120px;
+  width:100%;
+  min-width:0;
+}
+.gw canvas{
+  display:block;
+  width:100% !important;
+  max-width:100% !important;
+  height:100% !important;
+}.gw .t{position:absolute;left:0;right:0;bottom:2px;text-align:center;font-size:20px;font-weight:600}
+.cap{text-align:center;font-size:12px;color:var(--mut)}
+.fn{font-size:12px;color:var(--mut);margin-top:8px}
+.ch{position:relative;height:300px}.dn{position:relative;height:250px}
+table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:4px 6px;border-bottom:1px solid var(--bd);text-align:center}th:first-child,td:first-child{text-align:left}
+.p{border-radius:10px;padding:1px 8px;color:#fff;font-size:11px}
+.em{color:var(--mut);text-align:center;padding:90px 10px}
+  </style>
+ </head>
+ <body>
+  <div class="nav">
+   <b>
+    Dashboard • Indicadores Estatísticos
+   </b>
+   <span class="sp">
+   </span>
+   <span id="fl" style="font-size:12px;opacity:.85">
+    Dados consolidados do trabalho
+   </span>
+   <button class="btn" onclick="document.getElementById('up').click()">
+    Carregar planilha .xlsx
+   </button>
+   <input accept=".xlsx,.xls" hidden="" id="up" type="file"/>
+  </div>
+  <div class="wrap">
+   <h1>
+    Dashboard de Indicadores
+   </h1>
+   <div class="sub">
+    Indicadores de Brusque, Santa Catarina e Brasil — 2017, 2019, 2021 e 2023.
+   </div>
+   <div class="grid">
+    <div class="col">
+     <div class="g">
+      <h3>
+       Filtros
+      </h3>
+      <div class="b ctl">
+       <select id="sc">
+       </select>
+       <select id="yr">
+       </select>
+      </div>
+     </div>
+     <div class="g">
+      <h3 id="kt">
+       Resumo
+      </h3>
+      <div class="b kp" id="kp">
+      </div>
+     </div>
+    </div>
+    <div class="col">
+     <div class="g">
+      <h3>
+       Comparativo de Indicadores — Cidade / Estado / País
+      </h3>
+      <div class="b">
+       <div class="ctl" style="margin-bottom:8px">
+        <select id="ix">
+        </select>
+       </div>
+       <div class="ch">
+        <canvas id="c1">
+        </canvas>
+       </div>
+       <div class="fn" id="fn">
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="col">
+     <div class="g">
+      <h3>
+       Cobertura de serviços
+      </h3>
+      <div class="b">
+       <div class="gs">
+        <div>
+         <div class="gw">
+          <canvas id="g1">
+          </canvas>
+          <div class="t" id="t1">
+          </div>
+         </div>
+         <div class="cap">
+          Água canalizada
+         </div>
+        </div>
+        <div>
+         <div class="gw">
+          <canvas id="g2">
+          </canvas>
+          <div class="t" id="t2">
+          </div>
+         </div>
+         <div class="cap">
+          Coleta de lixo
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+     <div class="g">
+      <h3>
+       Matrículas na educação
+      </h3>
+      <div class="b">
+       <div class="dn">
+        <canvas id="c2">
+        </canvas>
+       </div>
+       <div class="cap" id="mt">
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+   <div class="fn" style="text-align:center;margin-top:14px">
+    Fonte: base de pesquisa da APS de Estatística • N/D = dado não disponível
+   </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js">
+  </script>
+  <script>
+   const AOA=[["TABELA DE DADOS ESTATISTICOS - CIDADE",null,null,null,null,null,"TABELA DE DADOS ESTATISTICOS - ESTADO",null,null,null,null,null,"TABELA DE DADOS ESTATISTICOS - PAÍS",null,null,null,null],["BRUSQUE",null,null,null,null,null,"SANTA CATARINA",null,null,null,null,null,"BRASIL",null,null,null,null],["INDICADORES DE HABITAÇÃO",null,null,null,null,null,"INDICADORES DE HABITAÇÃO",null,null,null,null,null,"INDICADORES DE HABITAÇÃO",null,null,null,null],["ANO",2017,2019,2021,2023,null,"ANO",2017,2019,2021,2023,null,"ANO",2017,2019,2021,2023],["AGUA CANALIZADA (%)",0.9805,0.9801,0.9603,0.8879,null,"AGUA CANALIZADA (%)",0.998,0.999,"N/D",0.999,null,"AGUA CANALIZADA (%)",0.972,0.976,"N/D",0.982],["FONTE","SNIS-GOV","SNIS-GOV","PLANILHA LPU-SAMAE","SINISA-GOV",null,"FONTE","IBGE-SIDRA","IBGE-SIDRA","IBGE-PNAD","IBGE-SIDRA",null,"FONTE","IBGE-SIDRA","IBGE-SIDRA","IBGE-PNAD","IBGE-SIDRA"],["TABELA/ARQUIVO","IN055","IN055","IN055","IAG0001",null,"TABELA/ARQUIVO",6733,6733,"N/D",6733,null,"TABELA/ARQUIVO",6733,6733,"N/D",6733],["LINK","SNIS-GOV","SNIS-GOV","PLANILHA LPU-SAMAE","SINISA-GOV",null,"LINK","IBGE-SIDRA","IBGE-SIDRA","IBGE-PNAD","IBGE-SIDRA",null,"LINK","IBGE-SIDRA","IBGE-SIDRA","IBGE-PNAD","IBGE-SIDRA"],["OBSERVAÇÕES","Para Brusque, foram utilizados dados do SNIS/SINISA referentes ao índice de atendimento total de água (IN055/IAG0001), devido à indisponibilidade de dados anuais equivalentes da PNAD/IBGE. Portanto, há diferença metodológica em relação aos dados de SC e Brasil.","Para Brusque, foram utilizados dados do SNIS/SINISA referentes ao índice de atendimento total de água (IN055/IAG0001), devido à indisponibilidade de dados anuais equivalentes da PNAD/IBGE. Portanto, há diferença metodológica em relação aos dados de SC e Brasil.","Dado obtido na Planilha LPU – Indicadores do SNIS 2021. Para Brusque/SC (SAMAE), o indicador IN055","Dado obtido na planilha oficial de Indicadores – Base Municipal do SINISA 2023, na aba ‘Atendimento’. Para Brusque/SC (SAMAE), o indicador IAG0001 – Atendimento da população total com rede de abastecimento de água apresenta o valor de 88,79%.",null,"OBSERVAÇÕES",null,null,"Dado não divulgado — módulo Características dos Domicílios da PNAD Contínua 2021 teve sua divulgação suspensa pelo IBGE.",null,null,"OBSERVAÇÕES",null,null,"Dado não divulgado — módulo Características dos Domicílios da PNAD Contínua 2021 teve sua divulgação suspensa pelo IBGE.",null],["ENERGIA (CONSUMIDORES)",52829,56385,60197,62938,null,"ENERGIA (CONSUMIDORES)",2945836,3098702,3281569,3444630,null,"ENERGIA (CONSUMIDORES)",70906513,73332638,76074953,80904875],["FONTE","CELESC - DADOS DE CONSUMO","CELESC - DADOS DE CONSUMO","CELESC - DADOS DE CONSUMO","CELESC - DADOS DE CONSUMO",null,"FONTE","EPE-GOV","EPE-GOV","EPE-GOV","EPE-GOV",null,"FONTE","EPE-GOV","EPE-GOV","EPE-GOV","EPE-GOV"],["TABELA/ARQUIVO","CELESC - DADOS DE CONSUMO","CELESC - DADOS DE CONSUMO","CELESC - DADOS DE CONSUMO","CELESC - DADOS DE CONSUMO",null,"TABELA/ARQUIVO","3.17","3.17","3.17","3.17",null,"TABELA/ARQUIVO","3.16","3.16","3.16","3.16"],["LINK","CELESC - DADOS DE CONSUMO","CELESC - DADOS DE CONSUMO","CELESC - DADOS DE CONSUMO","CELESC - DADOS DE CONSUMO",null,"LINK","EPE-GOV","EPE-GOV","EPE-GOV","EPE-GOV",null,"LINK","EPE-GOV","EPE-GOV","EPE-GOV","EPE-GOV"],["OBSERVAÇÕES","Valores correspondentes ao total de unidades consumidoras cativas de Brusque no mês de dezembro de cada ano, obtidos pela soma das classes de consumo disponibilizadas pela Celesc.","Valores correspondentes ao total de unidades consumidoras cativas de Brusque no mês de dezembro de cada ano, obtidos pela soma das classes de consumo disponibilizadas pela Celesc.","Valores correspondentes ao total de unidades consumidoras cativas de Brusque no mês de dezembro de cada ano, obtidos pela soma das classes de consumo disponibilizadas pela Celesc.","Valores correspondentes ao total de unidades consumidoras cativas de Brusque no mês de dezembro de cada ano, obtidos pela soma das classes de consumo disponibilizadas pela Celesc.",null,"OBSERVAÇÕES","Energia — consumidores residenciais (unidades). Dados referentes ao total de consumidores de energia elétrica em Santa Catarina, considerando consumidores cativos e livres","Energia — consumidores residenciais (unidades). Dados referentes ao total de consumidores de energia elétrica em Santa Catarina, considerando consumidores cativos e livres","Energia — consumidores residenciais (unidades). Dados referentes ao total de consumidores de energia elétrica em Santa Catarina, considerando consumidores cativos e livres","Energia — consumidores residenciais (unidades). Dados referentes ao total de consumidores de energia elétrica em Santa Catarina, considerando consumidores cativos e livres",null,"OBSERVAÇÕES","Energia — consumidores residenciais (unidades)","Energia — consumidores residenciais (unidades)","Energia — consumidores residenciais (unidades)","Energia — consumidores residenciais (unidades)"],["COLETA DE LIXO (%)",0.9766,1,1,1,null,"COLETA DE LIXO (%)",0.831,0.877,0.9078,0.903,null,"COLETA DE LIXO (%)",0.829,0.843,0.899,0.86],["FONTE","SNIS/PREFEITURA BQ - PMGIRS","SNIS/PREFEITURA BQ - PMGIRS","SNIS/PREFEITURA BQ - PMGIRS","SINISA",null,"FONTE","SIDRA-IBGE","SIDRA-IBGE","SEF/SC","SIDRA-IBGE",null,"FONTE","SIDRA-IBGE","SIDRA-IBGE","SNIS","SIDRA-IBGE"],["TABELA/ARQUIVO","QUADRO 24","QUADRO 24","Planilha_Indicadores_RS_2021.xls","SINISA_RESIDUOS_Indicadores_2023",null,"TABELA/ARQUIVO",6736,6736,"Contexto Socioeconômico — Saneamento Básico de SC",6736,null,"TABELA/ARQUIVO",6736,6736,"Diagnóstico Temático — Manejo de Resíduos Sólidos",6736],["LINK","SNIS/PREFEITURA BQ - PMGIRS","SNIS/PREFEITURA BQ - PMGIRS","SNIS/PREFEITURA BQ - PMGIRS","SINISA",null,"LINK","SIDRA-IBGE","SIDRA-IBGE","SEF/SC","SIDRA-IBGE",null,"LINK","SIDRA-IBGE","SIDRA-IBGE","SNIS","SIDRA-IBGE"],["OBSERVAÇÕES","Dado referente ao indicador IN015 — Taxa de cobertura da coleta de RDO em relação à população total do município.","Dado referente ao indicador IN015 — Taxa de cobertura da coleta de RDO em relação à população total do município.","Dado referente ao indicador IN015 — Taxa de cobertura da coleta de RDO em relação à população total do município, conforme dados do SNIS 2021.","Dado referente ao indicador IRS0001 — Cobertura da população total com coleta de resíduos sólidos domiciliares, conforme dados do SINISA 2023",null,"OBSERVAÇÕES","Percentual de domicílios com lixo coletado diretamente por serviço de limpeza, considerando a situação do domicílio total.","Percentual de domicílios com lixo coletado diretamente por serviço de limpeza, considerando a situação do domicílio total.","Dado de 2021 obtido por meio do SNIS, devido à indisponibilidade dos dados de Características dos Domicílios da PNAD Contínua para esse ano. Refere-se à população atendida por serviço de coleta de lixo.","Percentual de domicílios com lixo coletado diretamente por serviço de limpeza, considerando a situação do domicílio total.",null,"OBSERVAÇÕES","Percentual de domicílios com lixo coletado diretamente por serviço de limpeza, considerando a situação do domicílio total.","Percentual de domicílios com lixo coletado diretamente por serviço de limpeza, considerando a situação do domicílio total.","Dado de 2021 obtido por meio do SNIS, devido à indisponibilidade dos dados de Características dos Domicílios da PNAD Contínua para esse ano. Refere-se à taxa de cobertura da população total com coleta de resíduos domiciliares nos municípios participantes.","Percentual de domicílios com lixo coletado diretamente por serviço de limpeza, considerando a situação do domicílio total."],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],["EXPECTATIVA DE VIDA (ANOS)",78.64,78.64,78.64,78.64,null,"EXPECTATIVA DE VIDA (ANOS)",77.25,77.83,74.52,78.1,null,"EXPECTATIVA DE VIDA (ANOS)",75.72,76.22,72.78,76.39],["FONTE","PNUD","PNUD","PNUD","PNUD",null,"FONTE","IBGE","IBGE","IBGE","IBGE",null,"FONTE","IBGE","IBGE","IBGE","IBGE"],["TABELA/ARQUIVO","Índice de Desenvolvimento Humano Municipal Brasileiro","Índice de Desenvolvimento Humano Municipal Brasileiro","Índice de Desenvolvimento Humano Municipal Brasileiro","Índice de Desenvolvimento Humano Municipal Brasileiro",null,"TABELA/ARQUIVO","Projeções da População, Revisão 2024","Projeções da População, Revisão 2024","Projeções da População, Revisão 2024","Projeções da População, Revisão 2024",null,"TABELA/ARQUIVO","Projeções da População, Revisão 2024","Projeções da População, Revisão 2024","Projeções da População, Revisão 2024","Projeções da População, Revisão 2024"],["LINK","PNUD","PNUD","PNUD","PNUD",null,"LINK","IBGE","IBGE","IBGE","IBGE",null,"LINK","IBGE","IBGE","IBGE","IBGE"],["OBSERVAÇÕES","Dado municipal disponível no Atlas do Desenvolvimento Humano, referente ao Censo Demográfico de 2010. Não foi localizada estimativa oficial específica para o município de Brusque no ano de 2017.","Dado municipal disponível no Atlas do Desenvolvimento Humano, referente ao Censo Demográfico de 2010. Não foi localizada estimativa oficial específica para o município de Brusque no ano de 2019.","Dado municipal disponível no Atlas do Desenvolvimento Humano, referente ao Censo Demográfico de 2010. Não foi localizada estimativa oficial específica para o município de Brusque no ano de 2021.","Dado municipal disponível no Atlas do Desenvolvimento Humano, referente ao Censo Demográfico de 2010. Não foi localizada estimativa oficial específica para o município de Brusque no ano de 2023.",null,"OBSERVAÇÕES",null,null,null,null,null,"OBSERVAÇÕES",null,null,null,null],["TAXA DE ANALFABETISMO (%)",0.0393,0.0393,0.0393,0.018,null,"TAXA DE ANALFABETISMO (%)",0.026,0.023,"N/D",0.02,null,"TAXA DE ANALFABETISMO (%)",0.065,0.061,"N/D",0.054],["FONTE","IBGE","IBGE","IBGE","IBGE",null,"FONTE","IBGE-PNAD CONTÍNUA","IBGE-PNAD CONTÍNUA","IBGE-PNAD CONTÍNUA","IBGE-PNAD CONTÍNUA",null,"FONTE","IBGE-PNAD CONTÍNUA","IBGE-PNAD CONTÍNUA","IBGE-PNAD CONTÍNUA","IBGE-PNAD CONTÍNUA"],["TABELA/ARQUIVO","Municípios da AMMVI — Taxa de Analfabetismo (%)","Municípios da AMMVI — Taxa de Analfabetismo (%)","Municípios da AMMVI — Taxa de Analfabetismo (%)","Censo 2022 — Alfabetização: Resultados do Universo",null,"TABELA/ARQUIVO","PNAD Contínua Educação 2017 — Taxa de analfabetismo das pessoas de 15 anos ou mais, segundo as Unidades da Federação","PNAD Contínua Educação 2019 — Taxa de analfabetismo das pessoas de 15 anos ou mais","PNAD Contínua — Educação","PNAD Contínua Educação 2023 — Taxa de analfabetismo das pessoas de 15 anos ou mais",null,"TABELA/ARQUIVO","PNAD Contínua Educação 2017 — Taxa de analfabetismo das pessoas de 15 anos ou mais","PNAD Contínua Educação 2019 — Taxa de analfabetismo das pessoas de 15 anos ou mais","PNAD Contínua — Educação","PNAD Contínua Educação 2023 — Taxa de analfabetismo das pessoas de 15 anos ou mais"],["LINK","IBGE","IBGE","IBGE","IBGE",null,"LINK","IBGE-PNAD CONTÍNUA","IBGE-PNAD CONTÍNUA","IBGE-PNAD CONTÍNUA","IBGE-PNAD CONTÍNUA",null,"LINK","IBGE-PNAD CONTÍNUA","IBGE-PNAD CONTÍNUA","IBGE-PNAD CONTÍNUA","IBGE-PNAD CONTÍNUA"],["OBSERVAÇÕES","Dado municipal disponível anterior ao período analisado. Utilizado devido à indisponibilidade de taxa municipal específica para Brusque em 2017.","Dado municipal disponível anterior ao período analisado. Utilizado devido à indisponibilidade de taxa municipal específica para Brusque em 2019.","Dado municipal disponível anterior ao período analisado. Utilizado devido à indisponibilidade de taxa municipal específica para Brusque em 2021.","Dado municipal disponível anterior ao período analisado. Utilizado devido à indisponibilidade de taxa municipal específica para Brusque em 2023.",null,"OBSERVAÇÕES",null,null,"Dado não disponível. O IBGE não realizou a divulgação do tema Educação da PNAD Contínua para 2021 devido às alterações na coleta durante a pandemia de COVID-19.",null,null,"OBSERVAÇÕES",null,null,"Dado não disponível. O IBGE não realizou a divulgação do tema Educação da PNAD Contínua para 2021 devido às alterações na coleta durante a pandemia de COVID-19.",null],["TAXA DE NATALIDADE (POR 1000 HAB.)",16.83,17.73,14.63,13.4,null,"TAXA DE NATALIDADE (POR 1000 HAB.)",14.05,13.68,13.15,12.21,null,"TAXA DE NATALIDADE (POR 1000 HAB.)",14.08,13.56,12.55,11.98],["FONTE","DATASUS / SINASC","DATASUS / SINASC","DATASUS / SINASC","DATASUS / SINASC",null,"FONTE","DATASUS / SINASC","DATASUS / SINASC","DATASUS / SINASC","DATASUS / SINASC",null,"FONTE","DATASUS / SINASC","DATASUS / SINASC","DATASUS / SINASC","DATASUS / SINASC"],["TABELA/ARQUIVO","Taxa bruta de natalidade — série DATASUS","Taxa bruta de natalidade — série DATASUS","Taxa bruta de natalidade — série DATASUS","Taxa bruta de natalidade — série DATASUS",null,"TABELA/ARQUIVO","Taxa bruta de natalidade — série DATASUS","Taxa bruta de natalidade — série DATASUS","Taxa bruta de natalidade — série DATASUS","Taxa bruta de natalidade — série DATASUS",null,"TABELA/ARQUIVO","Taxa bruta de natalidade — série DATASUS","Taxa bruta de natalidade — série DATASUS","Taxa bruta de natalidade — série DATASUS","Taxa bruta de natalidade — série DATASUS"],["LINK","Fonte DATASUS/SINASC","Fonte DATASUS/SINASC","Fonte DATASUS/SINASC","Fonte DATASUS/SINASC",null,"LINK","Fonte DATASUS/SINASC","Fonte DATASUS/SINASC","Fonte DATASUS/SINASC","Fonte DATASUS/SINASC",null,"LINK","Fonte DATASUS/SINASC","Fonte DATASUS/SINASC","Fonte DATASUS/SINASC","Fonte DATASUS/SINASC"],["OBSERVAÇÕES",null,null,null,null,null,"OBSERVAÇÕES",null,null,null,null,null,"OBSERVAÇÕES",null,null,null,null],["POPULAÇÃO (HABITANTES)",128818,134723,140597,141385,null,"POPULAÇÃO (HABITANTES)",7001161,7164788,7338473,7610361,null,"POPULAÇÃO (HABITANTES)",207660929,210147125,213317639,203080756],["FONTE","IBGE","IBGE","IBGE","IBGE",null,"FONTE","IBGE","IBGE","IBGE","IBGE",null,"FONTE","IBGE","IBGE","IBGE","IBGE"],["TABELA/ARQUIVO","IBGE","IBGE","IBGE","IBGE",null,"TABELA/ARQUIVO","IBGE","IBGE","IBGE","IBGE",null,"TABELA/ARQUIVO","IBGE","IBGE","IBGE","IBGE"],["LINK","IBGE","IBGE","IBGE","IBGE",null,"LINK","IBGE","IBGE","IBGE","IBGE",null,"LINK","IBGE","IBGE","IBGE","IBGE"],["OBSERVAÇÕES",null,null,null,null,null,"OBSERVAÇÕES",null,null,null,null,null,"OBSERVAÇÕES",null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],["MATRICULAS NA EDUCAÇÃO",null,null,null,null,null,"MATRICULAS NA EDUCAÇÃO",null,null,null,null,null,"MATRICULAS NA EDUCAÇÃO",null,null,null,null],["PRÉ-ESCOLAR (Nº DE MATRÍCULAS)",3463,3509,3180,4147,null,"PRÉ-ESCOLAR (Nº DE MATRÍCULAS)",182287,191697,192687,210123,null,"PRÉ-ESCOLAR (Nº DE MATRÍCULAS)",5101935,5217686,4902189,5338282],["FONTE","PREFEITURA DE BRUSQUE","PREFEITURA DE BRUSQUE","PREFEITURA DE BRUSQUE","PREFEITURA DE BRUSQUE",null,"FONTE","INEP — Censo Escolar","INEP — Censo Escolar","INEP — Censo Escolar","INEP — Censo Escolar",null,"FONTE","INEP — Censo Escolar","INEP — Censo Escolar","INEP — Censo Escolar","INEP — Censo Escolar"],["TABELA/ARQUIVO","PREFEITURA DE BRUSQUE","PREFEITURA DE BRUSQUE","PREFEITURA DE BRUSQUE","PREFEITURA DE BRUSQUE",null,"TABELA/ARQUIVO","p. 19 — Matrículas por etapa de ensino em Santa Catarina – 2010 a 2017","p. 21 — Matrículas por etapa de ensino em Santa Catarina – 2010 a 2019","p. 21 — Matrículas por etapa de ensino em Santa Catarina – 2010 a 2021","p. 24 — Educação Infantil – Pré-escola: Matrículas por zona de localização em Santa Catarina – 2016 a 2025",null,"TABELA/ARQUIVO","Censo da Educação Básica 2017, Gráfico 6.","Resumo Técnico Censo da Educação Básica 2019, Gráfico 6, p. 20","Gráfico 7 — Educação Infantil, Censo Escolar 2021","Gráfico 13 — Educação Infantil, Censo Escolar 2023"],["LINK","PREFEITURA DE BRUSQUE","PREFEITURA DE BRUSQUE","PREFEITURA DE BRUSQUE","PREFEITURA",null,"LINK","INEP — Censo Escolar","INEP — Censo Escolar","INEP — Censo Escolar","INEP — Censo Escolar",null,"LINK","CENSO","CENSO","CENSO","CENSO"],["OBSERVAÇÕES",null,null,null,null,null,"OBSERVAÇÕES","Aumento de 4,1% em relação a 2016.","Crescimento de 2,1% em relação a 2018.","Queda de 0,8% em relação a 2020.","Crescimento de 9,1% em relação a 2021.",null,"OBSERVAÇÕES",null,null,null,null],["ENSINO FUNDAMENTAL (Nº DE MATRÍCULAS)",14873,15248,13446,"N/D",null,"ENSINO FUNDAMENTAL (Nº DE MATRÍCULAS)",843520,865262,900240,941272,null,"ENSINO FUNDAMENTAL (Nº DE MATRÍCULAS)",27348080,26923730,26515601,26108208],["FONTE","PREFEITURA DE BRUSQUE","PREFEITURA DE BRUSQUE","PREFEITURA DE BRUSQUE","PREFEITURA DE BRUSQUE",null,"FONTE","INEP — Censo Escolar","INEP — Censo Escolar","INEP — Censo Escolar","INEP — Censo Escolar",null,"FONTE","INEP — Censo Escolar","INEP — Censo Escolar","INEP — Censo Escolar","INEP — Censo Escolar"],["TABELA/ARQUIVO","PREFEITURA DE BRUSQUE","PREFEITURA DE BRUSQUE","PREFEITURA DE BRUSQUE","PREFEITURA DE BRUSQUE",null,"TABELA/ARQUIVO","p. 26 — Ensino Fundamental, matrículas por etapa de ensino","p. 26 — Ensino Fundamental, matrículas por etapa de ensino","p. 26 — Ensino Fundamental, matrículas por etapa de ensino","p. 26 — Ensino Fundamental, matrículas por etapa de ensino",null,"TABELA/ARQUIVO","Resumo Técnico — Ensino Fundamental","Gráfico 11 — Número de matrículas no Ensino Fundamental","Gráfico 11 — Número de matrículas no Ensino Fundamental","Gráfico 11 — Número de matrículas no Ensino Fundamental"],["LINK","PREFEITURA DE BRUSQUE","PREFEITURA DE BRUSQUE","PREFEITURA DE BRUSQUE","PREFEITURA DE BRUSQUE",null,"LINK","INEP — Censo Escolar","INEP — Censo Escolar","INEP — Censo Escolar","INEP — Censo Escolar",null,"LINK","INEP — Censo Escolar","INEP — Censo Escolar","INEP — Censo Escolar","INEP — Censo Escolar"],["OBSERVAÇÕES",null,null,null,null,null,"OBSERVAÇÕES",null,null,null,null,null,"OBSERVAÇÕES",null,null,null,"Menor número de matrículas entre os quatro anos analisados."],["ENSINO MÉDIO (Nº DE MATRÍCULAS)",3594,3908,3749,4318,null,"ENSINO MÉDIO (Nº DE MATRÍCULAS)",221744,242876,266537,267040,null,"ENSINO MÉDIO (Nº DE MATRÍCULAS)",7930384,7465891,7770557,7676743],["FONTE","Prefeitura de Brusque / Censo Escolar","Prefeitura de Brusque / Censo Escolar","Prefeitura de Brusque / Censo Escolar","Prefeitura de Brusque / Censo Escolar",null,"FONTE","INEP — Censo Escolar","INEP — Censo Escolar","INEP — Censo Escolar","INEP — Censo Escolar",null,"FONTE","INEP — Censo Escolar","INEP — Censo Escolar","INEP — Censo Escolar","INEP — Censo Escolar"],["TABELA/ARQUIVO","PREFEITURA DE BRUSQUE","PREFEITURA DE BRUSQUE","PREFEITURA DE BRUSQUE","PREFEITURA DE BRUSQUE",null,"TABELA/ARQUIVO","p. 49 — Ensino Médio, matrículas em SC","p. 49 — Ensino Médio, matrículas em SC","p. 49 — Ensino Médio, matrículas em SC","p. 49 — Ensino Médio, matrículas em SC",null,"TABELA/ARQUIVO","Tabela M7 — Ensino Médio","Tabela M7 — Número de matrículas do Ensino Médio, 2015–2019","Gráfico 15 — Número de matrículas no Ensino Médio, 2017–2021","Gráfico 18 — Número de matrículas no Ensino Médio, 2019–2023"],["LINK","PREFEITURA DE BRUSQUE","PREFEITURA DE BRUSQUE","PREFEITURA DE BRUSQUE","PREFEITURA DE BRUSQUE",null,"LINK","INEP — Censo Escolar","INEP — Censo Escolar","INEP — Censo Escolar","INEP — Censo Escolar",null,"LINK","INEP — Censo Escolar","INEP — Censo Escolar","INEP — Censo Escolar","INEP — Censo Escolar"],["OBSERVAÇÕES",null,null,null,null,null,"OBSERVAÇÕES",null,null,null,null,null,"OBSERVAÇÕES","Maior número entre 2017 e 2021.","Menor número registrado entre 2017 e 2021.","Aumento de 4,1% em relação a 2019.","Redução em relação a 2022, que registrou 7.866.695."],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]];
+const $=id=>document.getElementById(id),CH={},COL=['#4a90d9','#e08a00','#5aa83c'],KC=['#3b73b9','#a64d8c','#e08a00','#2e8b3d'];
+let D,S=0,Y=0,IX=0;
+function num(v){if(typeof v==='number')return v;if(typeof v==='string'&&/^[\d.,]+$/.test(v.trim()))return parseFloat(v.replace(',','.'));return null}
+function parse(a){const g=(r,c)=>a[r]&&a[r][c]!=null&&a[r][c]!==''?a[r][c]:null;
+ const yr=a.findIndex(r=>r&&r[0]==='ANO'),O=[1,7,13],inds=[];
+ for(let i=0;i<a.length-1;i++){const r=a[i];if(r&&typeof r[0]==='string'&&a[i+1]&&a[i+1][0]==='FONTE')
+  inds.push({label:r[0],v:O.map(o=>[0,1,2,3].map(k=>num(g(i,o+k)))),f:O.map(o=>[0,1,2,3].map(k=>g(i+1,o+k)))})}
+ return{years:[1,2,3,4].map(c=>g(yr,c)),scopes:[0,6,12].map(c=>g(1,c)||''),inds}}
+const find=p=>D.inds.find(x=>x.label.startsWith(p));
+function fmt(l,v){if(v==null)return'—';if(/TAXA DE NATALIDADE/.test(l))return Number(v).toFixed(2).replace('.',',')+'‰';if(/%/.test(l))return(v*100).toFixed(1).replace('.',',')+'%';if(/ANOS/.test(l))return v.toFixed(1).replace('.',',');return v.toLocaleString('pt-BR')}
+const nice=l=>l.charAt(0)+l.slice(1).toLowerCase();
+function mk(id,cfg){CH[id]&&CH[id].destroy();CH[id]=new Chart($(id),cfg)}
+function init(){D=parse(AOA);
+ const cnt=D.years.map((_,y)=>D.inds.reduce((s,i)=>s+i.v.filter(v=>v[y]!=null).length,0));
+ Y=cnt.lastIndexOf(Math.max(...cnt));
+ $('sc').innerHTML=D.scopes.map((s,i)=>`<option value="${i}">${nice(s)}</option>`).join('');
+ $('yr').innerHTML=D.years.map((s,i)=>`<option value="${i}">${s}</option>`).join('');
+ $('ix').innerHTML=D.inds.map((x,i)=>`<option value="${i}">${nice(x.label)}</option>`).join('');
+ $('sc').value=S;$('yr').value=Y;$('ix').value=IX;render()}
+function gauge(id,t,p,c){const x=find(p),v=x?x.v[S][Y]:null;$(t).textContent=v==null?'—':fmt(x.label,v);
+ $(t).style.color=v==null?'var(--mut)':c;
+ mk(id,{type:'doughnut',data:{datasets:[{data:v==null?[0,1]:[v,1-v],backgroundColor:[c,'#d5d9e0'],borderWidth:0}]},options:{rotation:-90,circumference:180,cutout:'70%',plugins:{legend:{display:false},tooltip:{enabled:false}},maintainAspectRatio:false,animation:false}})}
+function render(){const L=D.scopes[S],yr=D.years[Y];
+ $('kt').textContent=`Resumo – ${nice(L)} (${yr})`;
+ $('kp').innerHTML=[['POPULAÇÃO','POPULAÇÃO'],['EXPECTATIVA DE VIDA','EXPECTATIVA'],['CONSUMIDORES DE ENERGIA','ENERGIA'],['NATALIDADE','TAXA DE NATAL']].map(([n,p],i)=>{const x=find(p),v=x?x.v[S][Y]:null;
+  return`<div><div class="n" style="color:${v==null?'var(--mut)':KC[i]}">${fmt(x?x.label:'',v)}</div><span class="l" style="color:${KC[i]};border-color:${KC[i]}">${n}</span></div>`}).join('');
+
+ gauge('g1','t1','AGUA','#3b73b9');gauge('g2','t2','COLETA','#2e8b3d');
+ const x=D.inds[IX],pc=/%/.test(x.label),m=pc?100:1;
+ mk('c1',{type:'bar',data:{labels:D.years,datasets:D.scopes.map((s,i)=>({label:nice(s),data:x.v[i].map(v=>v==null?null:v*m),backgroundColor:COL[i]}))},
+  options:{maintainAspectRatio:false,animation:false,plugins:{title:{display:true,text:nice(x.label)},legend:{position:'bottom'}},scales:{y:{beginAtZero:true,type:/POPUL|ENERGIA/.test(x.label)?'logarithmic':'linear',min:/POPUL|ENERGIA/.test(x.label)?1000:undefined}}}});
+ $('fn').textContent='Fonte ('+nice(L)+', '+yr+'): '+(x.f[S][Y]||'a preencher')+(/POPUL|ENERGIA/.test(x.label)?' · escala logarítmica':'');
+ const ed=['PRÉ-ESCOLAR','ENSINO FUNDAMENTAL','ENSINO MÉDIO'].map(p=>find(p)).filter(Boolean),vs=ed.map(e=>e.v[S][Y]),tot=vs.reduce((a,b)=>a+(b||0),0);
+ if(CH.c2){CH.c2.destroy();delete CH.c2}
+ const dn=$('c2').parentElement;dn.querySelector('.em')?.remove();$('c2').style.display='block';
+ if(!tot){$('c2').style.display='none';dn.insertAdjacentHTML('beforeend','<div class="em">Sem dados de matrículas para '+nice(L)+' em '+yr+'<br>(a preencher)</div>');$('mt').textContent=''}
+ else{$('mt').textContent='Total: '+tot.toLocaleString('pt-BR')+' matrículas';mk('c2',{type:'doughnut',data:{labels:ed.map(e=>nice(e.label).replace(/ \(.*/,'')),datasets:[{data:vs.map(v=>v||0),backgroundColor:['#e08a00','#3b73b9','#5aa83c'],borderWidth:0}]},options:{maintainAspectRatio:false,animation:false,cutout:'60%',plugins:{legend:{position:'bottom'}}}})}}
+$('sc').onchange=e=>{S=+e.target.value;render()};$('yr').onchange=e=>{Y=+e.target.value;render()};$('ix').onchange=e=>{IX=+e.target.value;render()};
+$('up').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const wb=XLSX.read(await f.arrayBuffer());
+ const sn=wb.SheetNames.includes('Planilha1')?'Planilha1':wb.SheetNames[0];const a=XLSX.utils.sheet_to_json(wb.Sheets[sn],{header:1,defval:null});AOA.length=0;a.forEach(r=>AOA.push(r));init();$('fl').textContent='Planilha carregada: '+f.name}catch(err){alert('Não foi possível ler o arquivo.')}};
+init();
+  </script>
+ </body>
+</html>
